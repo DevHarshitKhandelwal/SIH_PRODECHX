@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { formatIndianNumber } from "../../lib/formatters";
-import { Search, Download } from "lucide-react";
+import { Search, Download, FolderKanban, Filter } from "lucide-react";
 
 
 const MASTER_PROJECTS_SAMPLE = [
@@ -50,48 +50,54 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="space-y-4 transition-colors duration-500">
-      {/* Top Header & Search Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div>
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">Projects Master Register</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Showing <strong className="text-slate-800 dark:text-slate-200">{formatIndianNumber(filteredProjects.length)}</strong> of <strong>2,231</strong> total central sector infrastructure projects.
-          </p>
+    <div className="space-y-5 transition-all duration-300">
+      {/* Top Header & Export Action */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-5 rounded-2xl">
+        <div className="flex items-center space-x-3">
+          <div className="p-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
+            <FolderKanban className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-base font-black text-slate-900 dark:text-white tracking-tight">Projects Master Register</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Showing <strong className="text-blue-600 dark:text-blue-400 font-mono">{formatIndianNumber(filteredProjects.length)}</strong> of <strong className="font-mono text-slate-800 dark:text-slate-200">2,231</strong> central sector infrastructure projects.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center space-x-3">
           <button
             onClick={handleExportCSV}
-            className="inline-flex items-center px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition"
+            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-200 active:scale-95"
           >
-            <Download className="w-3.5 h-3.5 mr-1.5" />
-            Export CSV
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV Dataset
           </button>
         </div>
       </div>
 
       {/* Filter Controls Bar */}
-      <div className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-2.5" />
+      <div className="glass-card p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Filter by code, project name, or ministry..."
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            placeholder="Search by 6-digit code, project name, or ministry..."
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-inner"
           />
         </div>
 
         <div className="flex items-center space-x-3">
           {/* Sector Filter */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Sector:</span>
+          <div className="flex items-center space-x-2 bg-slate-100/70 dark:bg-slate-950/70 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+            <Filter className="w-3.5 h-3.5 text-blue-500 ml-1" />
+            <span className="text-slate-500 dark:text-slate-400 font-semibold text-[11px]">Sector:</span>
             <select
               value={sectorFilter}
               onChange={(e) => setSectorFilter(e.target.value)}
-              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 focus:outline-none"
+              className="bg-transparent text-slate-900 dark:text-slate-100 font-semibold focus:outline-none cursor-pointer pr-2"
             >
               <option value="ALL">All Sectors</option>
               <option value="Railways">Railways</option>
@@ -103,61 +109,61 @@ export default function ProjectsPage() {
           </div>
 
           {/* Risk Filter */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Risk:</span>
+          <div className="flex items-center space-x-2 bg-slate-100/70 dark:bg-slate-950/70 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+            <span className="text-slate-500 dark:text-slate-400 font-semibold text-[11px] ml-1">Risk:</span>
             <select
               value={riskFilter}
               onChange={(e) => setRiskFilter(e.target.value)}
-              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 focus:outline-none"
+              className="bg-transparent text-slate-900 dark:text-slate-100 font-semibold focus:outline-none cursor-pointer pr-2"
             >
               <option value="ALL">All Risk Levels</option>
-              <option value="HIGH">HIGH RISK</option>
-              <option value="LOW">LOW RISK</option>
+              <option value="HIGH">HIGH RISK ONLY</option>
+              <option value="LOW">LOW RISK ONLY</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* High Density Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="glass-card rounded-2xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
+            <thead className="bg-slate-100/80 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 uppercase tracking-wider font-bold border-b border-slate-200/80 dark:border-slate-800/80">
               <tr>
-                <th className="px-4 py-3">Code</th>
-                <th className="px-4 py-3">Project Name</th>
-                <th className="px-4 py-3">Ministry & Sector</th>
-                <th className="px-4 py-3 text-right">Orig. Cost (Cr)</th>
-                <th className="px-4 py-3 text-right">Rev. Cost (Cr)</th>
-                <th className="px-4 py-3 text-right">Progress %</th>
-                <th className="px-4 py-3 text-center">Risk Flag</th>
-                <th className="px-4 py-3 text-right">Action</th>
+                <th className="px-4 py-3.5">Code</th>
+                <th className="px-4 py-3.5">Project Name</th>
+                <th className="px-4 py-3.5">Ministry & Sector</th>
+                <th className="px-4 py-3.5 text-right">Orig. Cost (Cr)</th>
+                <th className="px-4 py-3.5 text-right">Rev. Cost (Cr)</th>
+                <th className="px-4 py-3.5 text-right">Progress %</th>
+                <th className="px-4 py-3.5 text-center">Risk Status</th>
+                <th className="px-4 py-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
+            <tbody className="divide-y divide-slate-200/80 dark:divide-slate-800/80 font-medium">
               {filteredProjects.map((p) => (
-                <tr key={p.code} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
-                  <td className="px-4 py-3 font-mono font-bold text-blue-600 dark:text-blue-400">{p.code}</td>
-                  <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100 max-w-xs truncate">{p.name}</td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{p.ministry}</td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-700 dark:text-slate-300">₹{formatIndianNumber(p.originalCost)}</td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-900 dark:text-white font-bold">₹{formatIndianNumber(p.revisedCost)}</td>
-                  <td className="px-4 py-3 text-right">
-                    <span className="font-mono text-slate-700 dark:text-slate-300">{p.progress}%</span>
+                <tr key={p.code} className="hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                  <td className="px-4 py-3.5 font-mono font-bold text-blue-600 dark:text-blue-400">{p.code}</td>
+                  <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100 max-w-xs truncate">{p.name}</td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-400">{p.ministry}</td>
+                  <td className="px-4 py-3.5 text-right font-mono text-slate-700 dark:text-slate-300">₹{formatIndianNumber(p.originalCost)}</td>
+                  <td className="px-4 py-3.5 text-right font-mono text-slate-900 dark:text-white font-bold">₹{formatIndianNumber(p.revisedCost)}</td>
+                  <td className="px-4 py-3.5 text-right">
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{p.progress}%</span>
                   </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${
+                  <td className="px-4 py-3.5 text-center">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold ${
                       p.risk === "HIGH" 
-                        ? "bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800/60" 
-                        : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60"
+                        ? "bg-gradient-to-r from-rose-500/15 to-red-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30 shadow-sm shadow-rose-500/10" 
+                        : "bg-gradient-to-r from-emerald-500/15 to-teal-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-sm shadow-emerald-500/10"
                     }`}>
                       {p.risk} RISK
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3.5 text-right">
                     <Link
                       href={`/projects/${p.code}`}
-                      className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline font-semibold text-xs"
+                      className="inline-flex items-center px-3 py-1 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 rounded-lg text-xs font-bold transition border border-blue-200 dark:border-blue-800"
                     >
                       View &rarr;
                     </Link>
@@ -171,3 +177,4 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
