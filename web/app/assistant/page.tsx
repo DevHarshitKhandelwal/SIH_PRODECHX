@@ -91,9 +91,10 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-6rem)] flex gap-6">
+    <div className="min-h-[calc(100vh-7rem)] flex flex-col lg:flex-row gap-6">
       {/* Left Panel: Conversation Workspace */}
-      <div className="flex-1 bg-white rounded-lg border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+      <div className="flex-1 bg-white rounded-lg border border-slate-200 shadow-sm flex flex-col overflow-hidden min-h-[500px]">
+
         {/* Workspace Header */}
         <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -200,7 +201,8 @@ export default function AssistantPage() {
       </div>
 
       {/* Right Panel: Active Citation Evidence Inspector */}
-      <div className="w-80 bg-white rounded-lg border border-slate-200 shadow-sm p-4 flex flex-col">
+      <div className="w-full lg:w-80 bg-white rounded-lg border border-slate-200 shadow-sm p-4 flex flex-col">
+
         <div className="flex items-center space-x-2 pb-3 border-b border-slate-200">
           <Info className="w-4 h-4 text-blue-600" />
           <h3 className="font-semibold text-slate-800 text-sm">Grounded Evidence Inspector</h3>
