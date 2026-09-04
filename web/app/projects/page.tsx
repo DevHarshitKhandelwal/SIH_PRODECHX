@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { formatIndianNumber } from "@/lib/formatters";
+import { formatIndianNumber } from "../../lib/formatters";
+
 import { Search, Download, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Real sample records reflecting the verified 2,231 PAIMANA project update dataset

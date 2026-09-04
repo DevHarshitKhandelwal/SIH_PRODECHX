@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/layout/Sidebar";
-import Header from "@/components/layout/Header";
+import Sidebar from "../components/layout/Sidebar";
+import Header from "../components/layout/Header";
+
 
 export const metadata: Metadata = {
   title: "PRODECHX — MoSPI PAIMANA Infrastructure Platform",

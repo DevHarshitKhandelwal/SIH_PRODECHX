@@ -1,7 +1,8 @@
 "use client";
 
 import { FileText, ShieldCheck, CheckCircle2 } from "lucide-react";
-import { formatIndianNumber } from "@/lib/formatters";
+import { formatIndianNumber } from "../../lib/formatters";
+
 
 const DOCUMENTS_CATALOG = [
   {

@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { formatIndianNumber } from "@/lib/formatters";
+import { formatIndianNumber } from "../../../lib/formatters";
 import { 
   fetchProjectRisk, 
   fetchProjectExplanation, 
   ProjectRiskPrediction, 
   ProjectRiskExplanation 
-} from "@/lib/api/ml";
+} from "../../../lib/api/ml";
+
 import { 
   ArrowLeft, 
   ShieldAlert, 

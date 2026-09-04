@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { formatIndianNumber } from "@/lib/formatters";
+import { formatIndianNumber } from "../lib/formatters";
+
 import { 
   Building2, 
   IndianRupee, 

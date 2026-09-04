@@ -1,7 +1,8 @@
 "use client";
 
 import { BarChart3, IndianRupee } from "lucide-react";
-import { formatIndianNumber } from "@/lib/formatters";
+import { formatIndianNumber } from "../../lib/formatters";
+
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   ScatterChart, Scatter
