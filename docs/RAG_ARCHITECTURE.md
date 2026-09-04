@@ -1,145 +1,44 @@
-# PRODECHX — RAG & AI Intelligence Architecture Specification
+# PRODECHX — PAIMANA RAG Architecture & Vector Indexing Specification
 
 > **Document Version:** 1.0.0  
-> **Author:** Lead AI Architect, PRODECHX  
-> **Module Name:** `apps/api/intelligence`  
-> **Technology Stack:** Node.js / FastAPI, Supabase PostgreSQL, `pgvector`, OpenAI GPT-4o / Claude 3.5 Sonnet / Local LLM, LangChain / LlamaIndex
+> **Author:** Lead AI Systems & RAG Architect, PRODECHX  
+> **Date:** August 24, 2026
 
 ---
 
-## 1. High-Level Retrieval-Augmented Generation Flow
+## 1. Vector Space & Embedding Model Specification
 
-```text
-[User Natural Language Query]
-              │
-              v
-[Query Router & Intent Classifier]
-              │
-      ┌───────┴───────────────────────────┐
-      │                                   │
-      v (Structured Query)                v (Document RAG)
-[SQL Generator & Validator]         [Hybrid Search (BM25 + Vector)]
-      │                                   │
-      v                                   v
-[PostgreSQL Database]               [pgvector Vector Retriever]
-      │                                   │
-      └───────┬───────────────────────────┘
-              │
-              v
-[Context Injector & RBAC Filter]
-              │
-              v
-[LLM Grounded Synthesis]
-              │
-              v
-[Grounded Answer with Page Citations]
+- **Embedding Model**: `sentence-transformers/all-MiniLM-L6-v2`
+- **Embedding Dimension**: **384 dimensions**
+- **License**: Apache 2.0
+- **Compute Requirements**: ~120 MB RAM, lightweight CPU inference (~15 ms / chunk)
+- **Database Column**: `document_chunks.embedding` (`vector(384)` in Supabase PostgreSQL 17.6)
+- **Vector Index**: HNSW Cosine Similarity Index (`idx_document_chunks_embedding`)
+
+---
+
+## 2. Chunking & Metadata Enrichment
+
+- **Source Ingestion**: PyMuPDF page-aware chunking over `FlashReport_April2026.pdf`, `FlashReport_May2026.pdf`, `FlashReport_June_2026.pdf`.
+- **Chunk Count**: **487 embedded 384-dim chunks**.
+- **Metadata Attributes**: `document_id`, `page_id`, `report_year`, `report_month`, `period`, `page_number`, `project_code`, `source_filename`.
+
+---
+
+## 3. Hybrid Retrieval & Multi-Tool Routing
+
 ```
-
----
-
-## 2. Document Chunking & Vector Indexing Pipeline
-
-1. **Input Document Processing**: PAIMANA Flash Report PDFs (`FlashReport_April2026.pdf`, etc.) processed page-by-page.
-2. **Text Chunking Strategy**:
-   - **Chunk Size**: 500 tokens (~400 words).
-   - **Chunk Overlap**: 50 tokens (~40 words).
-   - **Delimiter**: Page break `\f` and section header anchors (`Table 6`, `Ministry of ...`).
-3. **Contextual Prefixing**: Every chunk text is prepended with explicit document metadata before vectorization:
-   ```text
-   Source File: FlashReport_April2026.pdf | Page: 55 | Reporting Month: April 2026 | Section: Table 6: All Ongoing Projects | Ministry: Ministry of Coal
-   --------------------------------------------------------------------------------
-   [Chunk Text Content...]
-   ```
-4. **Vector Embedding**: Generated using `text-embedding-3-small` (1536 dimensions).
-5. **Storage**: Saved in `document_chunks` table in Supabase PostgreSQL with HNSW cosine similarity index.
-
----
-
-## 3. Query Routing & Intent Classification
-
-When a user asks a question in the PRODECHX Intelligence Assistant (`/intelligence`), the Query Router determines the appropriate query execution strategy:
-
-### Route Classification Rules
-
-| Intent Type | Example Question | Execution Strategy | Target Data Sources |
-|---|---|---|---|
-| **Structured Analytics** | "Show all transport projects over ₹1,000 crore." | **Deterministic SQL Query** | `projects` JOIN `project_updates` |
-| **Document Evidence RAG** | "What delay reasons were mentioned in the April report?" | **Vector RAG Retrieval** | `document_chunks` (pgvector) |
-| **Predictive Intelligence** | "Why is Project ABC marked as high risk?" | **Hybrid RAG + ML + Database** | `projects` + `risk_predictions` + `document_chunks` |
-
-> **CRITICAL SECURITY RULE**: Direct execution of raw LLM-generated SQL against the production database is **STRICTLY PROHIBITED**. All natural language queries are parsed into parameterized AST filter objects validated against authorized column schemas.
-
----
-
-## 4. Vector Retrieval & Hybrid Search Algorithm
-
-To ensure maximum recall and precision, PRODECHX uses **Hybrid Search** combining dense vector search with sparse keyword search:
-
-```sql
--- Hybrid Vector + Keyword Retrieval Query in Supabase PostgreSQL
-WITH vector_search AS (
-    SELECT 
-        dc.id,
-        dc.document_id,
-        dc.page_number,
-        dc.chunk_text,
-        dc.metadata,
-        1 - (dc.embedding <=> query_embedding) AS vector_similarity
-    FROM document_chunks dc
-    ORDER BY dc.embedding <=> query_embedding
-    LIMIT 20
-),
-keyword_search AS (
-    SELECT 
-        dc.id,
-        dc.document_id,
-        dc.page_number,
-        dc.chunk_text,
-        dc.metadata,
-        ts_rank_cd(to_tsvector('english', dc.chunk_text), plainto_tsquery('english', query_text)) AS keyword_rank
-    FROM document_chunks dc
-    WHERE to_tsvector('english', dc.chunk_text) @@ plainto_tsquery('english', query_text)
-    LIMIT 20
-)
-SELECT 
-    COALESCE(v.id, k.id) AS id,
-    COALESCE(v.document_id, k.document_id) AS document_id,
-    COALESCE(v.page_number, k.page_number) AS page_number,
-    COALESCE(v.chunk_text, k.chunk_text) AS chunk_text,
-    COALESCE(v.metadata, k.metadata) AS metadata,
-    (COALESCE(v.vector_similarity, 0) * 0.7 + COALESCE(k.keyword_rank, 0) * 0.3) AS combined_score
-FROM vector_search v
-FULL OUTER JOIN keyword_search k ON v.id = k.id
-ORDER BY combined_score DESC
-LIMIT 5;
+User Query
+   │
+   ▼
+Query Classification & Intent Router
+   ├── Structured SQL Aggregations (Counts, Sector Totals) ──► Supabase PostgreSQL
+   ├── Risk & SHAP Attributions (Model Predictions) ──────────► RandomForest v2.0
+   └── Contextual Report Text ─────────────────────────────────► Hybrid RAG Search (Vector(384) + BM25 + Code Filter)
+   │
+   ▼
+Grounded Provider & Synthesizer Engine
+   │
+   ▼
+Output + Factual Response + [PAIMANA Report, p. XX] Citations
 ```
-
----
-
-## 5. Grounding & Citation System
-
-Every response generated by the PRODECHX Intelligence Assistant must cite its exact source document and page number:
-
-### System Prompt Constraint
-
-```text
-You are the PRODECHX Intelligence Assistant, an expert AI monitoring platform for infrastructure projects under MoSPI.
-
-Rules for response generation:
-1. Answer using ONLY the supplied context chunks from official PAIMANA PDF reports and verified database records.
-2. If the answer cannot be determined from the context, clearly state: "The requested information is not available in the ingested PAIMANA reports."
-3. EVERY factual claim or quote MUST include an explicit source citation in the format:
-   [Source: <Filename>, Page <PageNumber>]
-   Example: [Source: FlashReport_April2026.pdf, Page 55]
-4. Clearly distinguish between OBSERVED FACTS (from PDF text), ML PREDICTIONS (from risk engine), and CALCULATED DERIVED METRICS.
-```
-
----
-
-## 6. RBAC & Permission-Aware Retrieval
-
-1. **Role Enforcement**: Before executing RAG retrieval, the user's role and assigned `ministry_id` are injected into the query filter.
-2. **Data Scoping**:
-   - `SUPER_ADMIN` & `ANALYST`: Unrestricted retrieval across all ministries.
-   - `MINISTRY_ADMIN` & `PROJECT_OFFICER`: Retrieval filtered to projects belonging to their assigned ministry (`ministry_id = user.ministry_id`).
-   - Filter applied at database query level before LLM context generation.

@@ -1,0 +1,30 @@
+{
+  "model_version": "prodechx-randomforest-v2.0",
+  "model_type": "RandomForestClassifier",
+  "target": "target_cost_overrun_binary",
+  "prediction_horizon": "2 months",
+  "operating_threshold": 0.45,
+  "feature_version": "v2.0_leakage_free",
+  "allowed_features": [
+    "original_cost_log",
+    "expenditure_ratio",
+    "physical_progress_pct",
+    "physical_financial_gap"
+  ],
+  "prohibited_features": [
+    "revised_cost",
+    "revised_cost_ratio",
+    "cost_growth_pct",
+    "has_revised_cost",
+    "approved_cost_reduction_flag"
+  ],
+  "validation_metrics": {
+    "roc_auc": 0.8903,
+    "pr_auc": 0.739,
+    "precision_at_threshold": 0.541,
+    "recall_at_threshold": 0.824,
+    "brier_score": 0.1245
+  },
+  "eligible_cohort_count": 2030,
+  "validation_status": "validated_for_inference"
+}
