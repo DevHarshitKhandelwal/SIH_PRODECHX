@@ -97,11 +97,12 @@ export default function AssistantPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/assistant/chat`, {
+      const res = await fetch("/api/assistant/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: q })
       });
+
 
       if (res.ok) {
         const data = await res.json();
