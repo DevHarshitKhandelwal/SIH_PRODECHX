@@ -20,6 +20,7 @@ interface ChatMessage {
 }
 
 const EXAMPLE_QUESTIONS = [
+  "What is the largest budget project in PAIMANA?",
   "Why is project 612786 high risk?",
   "What is the current physical progress of project 612786?",
   "Which projects are high risk in the Ministry of Railways?",
