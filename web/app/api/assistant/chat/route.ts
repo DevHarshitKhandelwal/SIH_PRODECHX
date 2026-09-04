@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         { citation_tag: "PAIMANA May 2026, p. 28", period: "May 2026", page_number: 28, project_code: "POWER-SUMMARY", snippet: "Power sector cumulative cost overrun stands at 24.8% above original sanctioned cost." }
       ]
     });
-  } catch (err) {
+  } catch {
     return NextResponse.json({
       answer: "I couldn't find sufficient evidence in the available PAIMANA records.",
       sources: []
