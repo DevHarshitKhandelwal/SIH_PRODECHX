@@ -5,9 +5,13 @@ Combines Hybrid RAG Retrieval, Read-Only Database Tools, ML Risk Predictions, an
 
 import sys
 import re
+import os
 import time
 
-sys.path.insert(0, r'd:\SIH')
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 
 from assistant.retrieval.hybrid_search import HybridRetriever
 from assistant.tools.read_only_tools import ReadOnlyAssistantTools

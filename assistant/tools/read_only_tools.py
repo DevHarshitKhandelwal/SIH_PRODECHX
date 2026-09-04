@@ -6,8 +6,10 @@ Strict Security Rule: All tools are READ-ONLY. Zero database writes allowed.
 import sys
 import json
 import os
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
-sys.path.insert(0, r'd:\SIH')
 
 from ml.inference.predictor import PaimanaPredictor
 

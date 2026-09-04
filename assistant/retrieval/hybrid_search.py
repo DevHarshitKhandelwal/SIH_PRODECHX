@@ -9,7 +9,10 @@ import os
 import re
 import numpy as np
 
-sys.path.insert(0, r'd:\SIH')
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 
 from services.rag.ingest_chunks import SimpleVectorEmbedder
 

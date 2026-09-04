@@ -10,7 +10,10 @@ from typing import List, Optional, Dict, Any
 import os
 import sys
 
-sys.path.insert(0, r'd:\SIH')
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 
 from ml.inference.predictor import PaimanaPredictor
 from assistant.llm.provider import GroundedAssistantProvider

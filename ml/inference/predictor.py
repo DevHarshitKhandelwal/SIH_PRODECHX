@@ -11,7 +11,11 @@ import joblib
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, r'd:\SIH')
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+DEFAULT_MODEL_DIR = os.path.join(BASE_DIR, "ml", "models", "prodechx-randomforest-v2.0")
 
 from ml.features.builder import FeatureBuilder
 
@@ -31,8 +35,9 @@ class PaimanaPredictor:
         "701107": {'original_cost_snap': 500.00, 'cumulative_expenditure': 200.00, 'physical_progress_pct': 40.0, 'month': 'April 2026'}
     }
 
-    def __init__(self, model_dir=r'd:\SIH\ml\models\prodechx-randomforest-v2.0', execute_sql_fn=None):
+    def __init__(self, model_dir=DEFAULT_MODEL_DIR, execute_sql_fn=None):
         self.model_dir = model_dir
+
         self.execute_sql_fn = execute_sql_fn
         self.model = None
         self.metadata = {}
