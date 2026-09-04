@@ -5,71 +5,66 @@
 @layer base {
   html {
     @apply transition-colors duration-500 ease-in-out scroll-smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   body {
-    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white transition-colors duration-500 ease-in-out;
+    @apply bg-[#f8f9fa] dark:bg-[#07080a] text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-blue-500/20 selection:text-blue-500 transition-colors duration-500 ease-in-out;
   }
 }
 
-/* Glassmorphism & Premium UI Utilities */
-.glass-card {
-  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 shadow-xl shadow-slate-900/5;
+/* Apple-Grade Minimalist Glass & Surfaces */
+.apple-card {
+  @apply bg-white/80 dark:bg-[#12141a]/80 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] rounded-3xl transition-all duration-300;
 }
 
-.glass-card-hover {
-  @apply glass-card hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-0.5 transition-all duration-300;
+.apple-card-hover {
+  @apply apple-card hover:border-slate-300/80 dark:hover:border-slate-700/80 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-0.5;
 }
 
-.glass-header {
-  @apply bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-md shadow-slate-900/5;
+.apple-header {
+  @apply bg-white/70 dark:bg-[#07080a]/70 backdrop-blur-2xl border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)];
 }
 
-.bg-mesh-glow {
-  background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+.apple-button {
+  @apply bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold rounded-2xl px-4 py-2 text-xs transition-all duration-200 shadow-sm active:scale-95 disabled:opacity-50;
 }
 
-.glow-blue {
-  box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3);
+.apple-input {
+  @apply bg-slate-100/70 dark:bg-[#161821]/70 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl px-4 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all duration-200 shadow-inner;
 }
 
-.glow-rose {
-  box-shadow: 0 0 20px -5px rgba(244, 63, 94, 0.3);
+.apple-badge-rose {
+  @apply bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-full px-3 py-0.5 text-[11px] font-semibold tracking-wide backdrop-blur-md;
 }
 
-.glow-emerald {
-  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
+.apple-badge-emerald {
+  @apply bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-full px-3 py-0.5 text-[11px] font-semibold tracking-wide backdrop-blur-md;
+}
+
+.apple-badge-blue {
+  @apply bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-full px-3 py-0.5 text-[11px] font-semibold tracking-wide backdrop-blur-md;
 }
 
 /* Smooth color transitions for Theme Switching */
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, box-shadow, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   transition-duration: 300ms;
 }
 
-/* Custom scrollbars for high-density tables */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100 dark:bg-slate-950;
+  @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  @apply bg-slate-300/60 dark:bg-slate-700/60 rounded-full;
 }
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-slate-400 dark:bg-slate-600;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-4px); }
-  40%, 80% { transform: translateX(4px); }
-}
-
-.animate-shake {
-  animation: shake 0.4s ease-in-out;
-}
 
