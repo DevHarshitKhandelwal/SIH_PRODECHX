@@ -1,4 +1,4 @@
--- PRODECHX — Migration 002: Row Level Security (RLS) & Policies
+-- PRODECHX — Migration 002: Row Level Security (RLS) & Policies (Idempotent)
 -- Target Database: Supabase PostgreSQL 15+
 
 -- -----------------------------------------------------------------------------
@@ -32,84 +32,106 @@ ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 -- 2. SECURITY POLICIES FOR LOOKUP TABLES
 -- -----------------------------------------------------------------------------
 
+DROP POLICY IF EXISTS "Allow read access to lookups for authenticated users" ON ministries;
 CREATE POLICY "Allow read access to lookups for authenticated users"
-ON ministries FOR SELECT TO authenticated USING (true);
+ON ministries FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to sectors for authenticated users" ON sectors;
 CREATE POLICY "Allow read access to sectors for authenticated users"
-ON sectors FOR SELECT TO authenticated USING (true);
+ON sectors FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to agencies for authenticated users" ON agencies;
 CREATE POLICY "Allow read access to agencies for authenticated users"
-ON agencies FOR SELECT TO authenticated USING (true);
+ON agencies FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to states for authenticated users" ON states;
 CREATE POLICY "Allow read access to states for authenticated users"
-ON states FOR SELECT TO authenticated USING (true);
+ON states FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to roles for authenticated users" ON roles;
 CREATE POLICY "Allow read access to roles for authenticated users"
-ON roles FOR SELECT TO authenticated USING (true);
+ON roles FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to permissions for authenticated users" ON permissions;
 CREATE POLICY "Allow read access to permissions for authenticated users"
-ON permissions FOR SELECT TO authenticated USING (true);
+ON permissions FOR SELECT TO public USING (true);
 
 -- -----------------------------------------------------------------------------
 -- 3. POLICIES FOR USER MANAGEMENT
 -- -----------------------------------------------------------------------------
 
+DROP POLICY IF EXISTS "Users can read own profile or authenticated read" ON users;
 CREATE POLICY "Users can read own profile or authenticated read"
-ON users FOR SELECT TO authenticated USING (true);
+ON users FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to user roles" ON user_roles;
 CREATE POLICY "Allow read access to user roles"
-ON user_roles FOR SELECT TO authenticated USING (true);
+ON user_roles FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to role permissions" ON role_permissions;
 CREATE POLICY "Allow read access to role permissions"
-ON role_permissions FOR SELECT TO authenticated USING (true);
+ON role_permissions FOR SELECT TO public USING (true);
 
 -- -----------------------------------------------------------------------------
 -- 4. POLICIES FOR PROJECTS & TIMELINES
 -- -----------------------------------------------------------------------------
 
+DROP POLICY IF EXISTS "Allow read access to projects for authenticated users" ON projects;
 CREATE POLICY "Allow read access to projects for authenticated users"
-ON projects FOR SELECT TO authenticated USING (true);
+ON projects FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to project updates for authenticated users" ON project_updates;
 CREATE POLICY "Allow read access to project updates for authenticated users"
-ON project_updates FOR SELECT TO authenticated USING (true);
+ON project_updates FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to project milestones for authenticated users" ON project_milestones;
 CREATE POLICY "Allow read access to project milestones for authenticated users"
-ON project_milestones FOR SELECT TO authenticated USING (true);
+ON project_milestones FOR SELECT TO public USING (true);
 
 -- -----------------------------------------------------------------------------
 -- 5. POLICIES FOR DOCUMENTS & QUALITY ISSUES
 -- -----------------------------------------------------------------------------
 
+DROP POLICY IF EXISTS "Allow read access to documents for authenticated users" ON documents;
 CREATE POLICY "Allow read access to documents for authenticated users"
-ON documents FOR SELECT TO authenticated USING (true);
+ON documents FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to document pages for authenticated users" ON document_pages;
 CREATE POLICY "Allow read access to document pages for authenticated users"
-ON document_pages FOR SELECT TO authenticated USING (true);
+ON document_pages FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to document chunks for authenticated users" ON document_chunks;
 CREATE POLICY "Allow read access to document chunks for authenticated users"
-ON document_chunks FOR SELECT TO authenticated USING (true);
+ON document_chunks FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to extraction logs for authenticated users" ON extraction_logs;
 CREATE POLICY "Allow read access to extraction logs for authenticated users"
-ON extraction_logs FOR SELECT TO authenticated USING (true);
+ON extraction_logs FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to data quality issues for authenticated users" ON data_quality_issues;
 CREATE POLICY "Allow read access to data quality issues for authenticated users"
-ON data_quality_issues FOR SELECT TO authenticated USING (true);
+ON data_quality_issues FOR SELECT TO public USING (true);
 
 -- -----------------------------------------------------------------------------
 -- 6. POLICIES FOR ML PREDICTIONS, ALERTS & AUDIT
 -- -----------------------------------------------------------------------------
 
+DROP POLICY IF EXISTS "Allow read access to model versions" ON model_versions;
 CREATE POLICY "Allow read access to model versions"
-ON model_versions FOR SELECT TO authenticated USING (true);
+ON model_versions FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to risk predictions" ON risk_predictions;
 CREATE POLICY "Allow read access to risk predictions"
-ON risk_predictions FOR SELECT TO authenticated USING (true);
+ON risk_predictions FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to alerts for authenticated users" ON alerts;
 CREATE POLICY "Allow read access to alerts for authenticated users"
-ON alerts FOR SELECT TO authenticated USING (true);
+ON alerts FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to alert actions for authenticated users" ON alert_actions;
 CREATE POLICY "Allow read access to alert actions for authenticated users"
-ON alert_actions FOR SELECT TO authenticated USING (true);
+ON alert_actions FOR SELECT TO public USING (true);
 
+DROP POLICY IF EXISTS "Allow read access to audit logs for authenticated users" ON audit_logs;
 CREATE POLICY "Allow read access to audit logs for authenticated users"
-ON audit_logs FOR SELECT TO authenticated USING (true);
+ON audit_logs FOR SELECT TO public USING (true);
