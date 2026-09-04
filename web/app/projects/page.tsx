@@ -3,10 +3,9 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { formatIndianNumber } from "../../lib/formatters";
+import { Search, Download } from "lucide-react";
 
-import { Search, Download, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Real sample records reflecting the verified 2,231 PAIMANA project update dataset
 const MASTER_PROJECTS_SAMPLE = [
   { id: "p1", code: "612786", name: "Udhampur-Srinagar-Baramulla Rail Link Project", ministry: "Ministry of Railways", sector: "Railways", state: "Jammu and Kashmir", agency: "Northern Railway", originalCost: 861.06, revisedCost: 37012.00, expenditure: 32700.00, progress: 65.5, risk: "HIGH", month: "April 2026" },
   { id: "p2", code: "701107", name: "Mumbai-Ahmedabad High Speed Rail Corridor", ministry: "Ministry of Railways", sector: "Railways", state: "Gujarat / Maharashtra", agency: "NHSRCL", originalCost: 108000.00, revisedCost: 160000.00, expenditure: 86700.00, progress: 42.0, risk: "HIGH", month: "April 2026" },
@@ -25,7 +24,6 @@ export default function ProjectsPage() {
   const [sectorFilter, setSectorFilter] = useState("ALL");
   const [riskFilter, setRiskFilter] = useState("ALL");
 
-  // Filtered dataset calculation
   const filteredProjects = useMemo(() => {
     return MASTER_PROJECTS_SAMPLE.filter((p) => {
       const matchesSearch =
@@ -38,7 +36,6 @@ export default function ProjectsPage() {
     });
   }, [searchTerm, sectorFilter, riskFilter]);
 
-  // CSV Export Handler
   const handleExportCSV = () => {
     const headers = "Code,Name,Ministry,Sector,State,OriginalCost,RevisedCost,Expenditure,Progress,Risk\n";
     const rows = filteredProjects
@@ -53,20 +50,20 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 transition-colors duration-500">
       {/* Top Header & Search Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div>
-          <h2 className="text-base font-bold text-slate-900">Projects Master Register</h2>
-          <p className="text-xs text-slate-500">
-            Showing <strong className="text-slate-800">{formatIndianNumber(filteredProjects.length)}</strong> of <strong>2,231</strong> total central sector infrastructure projects.
+          <h2 className="text-base font-bold text-slate-900 dark:text-white">Projects Master Register</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Showing <strong className="text-slate-800 dark:text-slate-200">{formatIndianNumber(filteredProjects.length)}</strong> of <strong>2,231</strong> total central sector infrastructure projects.
           </p>
         </div>
 
         <div className="flex items-center space-x-3">
           <button
             onClick={handleExportCSV}
-            className="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded border border-slate-300 transition"
+            className="inline-flex items-center px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition"
           >
             <Download className="w-3.5 h-3.5 mr-1.5" />
             Export CSV
@@ -75,123 +72,100 @@ export default function ProjectsPage() {
       </div>
 
       {/* Filter Controls Bar */}
-      <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex flex-wrap items-center gap-3 text-xs">
+      <div className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+          <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-2.5" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Filter by code, project name, or ministry..."
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
-        {/* Sector Filter */}
-        <div className="flex items-center space-x-1.5">
-          <span className="text-slate-500 font-medium">Sector:</span>
-          <select
-            value={sectorFilter}
-            onChange={(e) => setSectorFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-slate-800 focus:outline-none"
-          >
-            <option value="ALL">All Sectors</option>
-            <option value="Railways">Railways</option>
-            <option value="Road Transport & Highways">Road Transport</option>
-            <option value="Power">Power</option>
-            <option value="Petroleum">Petroleum</option>
-            <option value="Water Resources">Water Resources</option>
-          </select>
-        </div>
+        <div className="flex items-center space-x-3">
+          {/* Sector Filter */}
+          <div className="flex items-center space-x-1.5">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Sector:</span>
+            <select
+              value={sectorFilter}
+              onChange={(e) => setSectorFilter(e.target.value)}
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 focus:outline-none"
+            >
+              <option value="ALL">All Sectors</option>
+              <option value="Railways">Railways</option>
+              <option value="Road Transport & Highways">Road Transport</option>
+              <option value="Power">Power</option>
+              <option value="Petroleum">Petroleum</option>
+              <option value="Water Resources">Water Resources</option>
+            </select>
+          </div>
 
-        {/* Risk Filter */}
-        <div className="flex items-center space-x-1.5">
-          <span className="text-slate-500 font-medium">Risk Level:</span>
-          <select
-            value={riskFilter}
-            onChange={(e) => setRiskFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-slate-800 focus:outline-none"
-          >
-            <option value="ALL">All Risk Levels</option>
-            <option value="HIGH">HIGH RISK (Prob &ge; 0.45)</option>
-            <option value="LOW">LOW RISK (Prob &lt; 0.45)</option>
-          </select>
+          {/* Risk Filter */}
+          <div className="flex items-center space-x-1.5">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Risk:</span>
+            <select
+              value={riskFilter}
+              onChange={(e) => setRiskFilter(e.target.value)}
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 focus:outline-none"
+            >
+              <option value="ALL">All Risk Levels</option>
+              <option value="HIGH">HIGH RISK</option>
+              <option value="LOW">LOW RISK</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* High Density Table */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 text-slate-700 uppercase tracking-wider font-semibold border-b border-slate-200">
+            <thead className="bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
               <tr>
                 <th className="px-4 py-3">Code</th>
                 <th className="px-4 py-3">Project Name</th>
                 <th className="px-4 py-3">Ministry & Sector</th>
-                <th className="px-4 py-3">State</th>
                 <th className="px-4 py-3 text-right">Orig. Cost (Cr)</th>
                 <th className="px-4 py-3 text-right">Rev. Cost (Cr)</th>
-                <th className="px-4 py-3 text-right">Exp. (Cr)</th>
-                <th className="px-4 py-3 text-right">Physical %</th>
-                <th className="px-4 py-3 text-center">Risk Level</th>
+                <th className="px-4 py-3 text-right">Progress %</th>
+                <th className="px-4 py-3 text-center">Risk Flag</th>
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 font-medium">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
               {filteredProjects.map((p) => (
-                <tr key={p.id} className="hover:bg-slate-50 transition">
-                  <td className="px-4 py-3 font-mono font-bold text-blue-600">{p.code}</td>
-                  <td className="px-4 py-3 font-semibold text-slate-900 max-w-xs truncate">{p.name}</td>
-                  <td className="px-4 py-3 text-slate-600">
-                    <div>{p.ministry}</div>
-                    <div className="text-[10px] text-slate-400 font-normal">{p.sector}</div>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">{p.state}</td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-700">₹{formatIndianNumber(p.originalCost)}</td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-900">₹{formatIndianNumber(p.revisedCost)}</td>
-                  <td className="px-4 py-3 text-right font-mono text-emerald-700">₹{formatIndianNumber(p.expenditure)}</td>
+                <tr key={p.code} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                  <td className="px-4 py-3 font-mono font-bold text-blue-600 dark:text-blue-400">{p.code}</td>
+                  <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100 max-w-xs truncate">{p.name}</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{p.ministry}</td>
+                  <td className="px-4 py-3 text-right font-mono text-slate-700 dark:text-slate-300">₹{formatIndianNumber(p.originalCost)}</td>
+                  <td className="px-4 py-3 text-right font-mono text-slate-900 dark:text-white font-bold">₹{formatIndianNumber(p.revisedCost)}</td>
                   <td className="px-4 py-3 text-right">
-                    <span className="font-mono text-slate-800">{p.progress}%</span>
+                    <span className="font-mono text-slate-700 dark:text-slate-300">{p.progress}%</span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    {p.risk === "HIGH" ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-700 border border-red-200">
-                        HIGH RISK
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
-                        LOW RISK
-                      </span>
-                    )}
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${
+                      p.risk === "HIGH" 
+                        ? "bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800/60" 
+                        : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60"
+                    }`}>
+                      {p.risk} RISK
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/projects/${p.code}`}
-                      className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-xs"
+                      className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline font-semibold text-xs"
                     >
-                      Audit Details &rarr;
+                      View &rarr;
                     </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* Pagination Controls */}
-        <div className="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
-          <div>
-            Showing 1 to {filteredProjects.length} of {filteredProjects.length} filtered entries
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-2.5 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-100 disabled:opacity-50" disabled>
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </button>
-            <span className="font-mono text-slate-700">Page 1 of 1</span>
-            <button className="px-2.5 py-1 bg-white border border-slate-200 rounded text-slate-600 hover:bg-slate-100 disabled:opacity-50" disabled>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
         </div>
       </div>
     </div>
